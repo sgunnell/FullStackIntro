@@ -40,5 +40,6 @@
   "devDependencies": {
     "json-server": "^0.17.0",
     "nodemon": "^2.0.19"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }

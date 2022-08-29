@@ -94,6 +94,7 @@ const App = (props) => {
           })
           .catch((error)=>{
             setNotificationMessage({text:`${newName} was already removed from server`, type: "error"})
+            
             })
           }
           
@@ -107,9 +108,10 @@ const App = (props) => {
       })
       .catch((error) => {
         setNotificationMessage({
-          text: error.response.data,
+          text: error.response.data.error,
           type: "error",
         });
+        console.log(error.response.data.error)
       })
     }
       setNewName('')

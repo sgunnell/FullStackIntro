@@ -20,14 +20,14 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs( blogs ))
   }, [])
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMessage(null)
     }, 5000)
     return () => {
       clearTimeout(timer)
-    };
+    }
   }, [message])
 
   useEffect(() => {
@@ -39,34 +39,34 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (username, password) => {  
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
         username, password,
       })
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user)) 
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-    
-      setMessage({text: 'Successfully Logged In', type: 'notification'})
-      console.log("successfully logged in")
+
+      setMessage({ text: 'Successfully Logged In', type: 'notification' })
+      console.log('successfully logged in')
     } catch (err) {
-      setMessage({text: 'Invalid Credentials', type: 'error'})
-      console.log("error logging in")
+      setMessage({ text: 'Invalid Credentials', type: 'error' })
+      console.log('error logging in')
     }
-  } 
+  }
 
   const handleLogout = () => {
-    window.localStorage.clear();
-    setMessage({text: 'Successfully Logged Out', type: 'notification'})
-    setUser(null);
+    window.localStorage.clear()
+    setMessage({ text: 'Successfully Logged Out', type: 'notification' })
+    setUser(null)
   }
 
   const createBlog = async (title, author, url) => {
     blogFormRef.current.toggleVisibility()
     try{
       if (!title || !author || !url){
-        setMessage({text: 'Please fill in all fields', type: 'error'})
+        setMessage({ text: 'Please fill in all fields', type: 'error' })
         console.log('fill in all fields')
         return
       }
@@ -76,16 +76,16 @@ const App = () => {
         url,
       })
       setBlogs(blogs.concat(blog))
-      setMessage({text: `A new blog ${title} by ${author} added`, type: 'notification'})
-      console.log("Successfully added new blog")
+      setMessage({ text: `A new blog ${title} by ${author} added`, type: 'notification' })
+      console.log('Successfully added new blog')
     }catch(exception){
-      setMessage({text: 'Error Adding Blog', type: 'error'})
-      console.log("adding blog failed")
+      setMessage({ text: 'Error Adding Blog', type: 'error' })
+      console.log('adding blog failed')
     }
   }
 
   const updateLikes = async (id, blogToUpdate) => {
-    console.log("updating likes in app.js")
+    console.log('updating likes in app.js')
     try{
       const updatedBlog = await blogService.update(id,blogToUpdate)
       const newBlogs = blogs.map((blog) =>
@@ -93,7 +93,21 @@ const App = () => {
       )
       setBlogs(newBlogs)
     } catch( exception){
-      setMessage({text: 'Error updating likes', type: 'error'})
+      setMessage({ text: 'Error updating likes', type: 'error' })
+    }
+
+  }
+
+  const deleteBlog = async (blogId) => {
+    console.log('delete blog, app.js')
+    try{
+      await blogService.remove(blogId)
+
+      const updatedBlogs = blogs.filter((blog) => blog.id !==blogId)
+      setBlogs(updatedBlogs)
+      setMessage({ text: 'Blog Removed',type: 'notification' })
+    } catch( exception){
+      setMessage({ text: 'Error updating likes', type: 'error' })
     }
 
   }
@@ -103,25 +117,26 @@ const App = () => {
       {user === null ? <h2> log in to application</h2> : <h2> blogs</h2>}
       <Notification message={message} />
       {user === null ?
-        <Togglable buttonLabel = 'login'> 
+        <Togglable buttonLabel = 'login'>
           <LoginForm handleLogin={handleLogin}/>
         </Togglable> :
         <div>
-          
-          <span>{user.name} {" "} {user.username} </span> logged in{" "}
-            <button  onClick={handleLogout}>
+
+          <span>{user.name} {' '} {user.username} </span> logged in{' '}
+          <button  onClick={handleLogout}>
               logout
-            </button>
-          <Togglable buttonLabel = 'add blog' ref = {blogFormRef}> 
+          </button>
+          <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>
             <BlogForm createBlog={createBlog}/>
           </Togglable>
           <div className="blogs">
             {blogs
-              .sort((a,b)=> b.likes - a.likes)
+              .sort((a,b) => b.likes - a.likes)
               .map((blog) => (
                 <Blog
                   username={user.username}
                   updateLike={updateLikes}
+                  deleteBlog={deleteBlog}
                   key={blog.id}
                   blog={blog}
                 />

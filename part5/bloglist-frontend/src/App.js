@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from "react"
 
-import Blog from './components/Blog'
-import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import BlogForm  from './components/BlogForm'
-import Togglable from './components/Togglable'
+import Blog from "./components/Blog"
+import Notification from "./components/Notification"
+import LoginForm from "./components/LoginForm"
+import BlogForm  from "./components/BlogForm"
+import Togglable from "./components/Togglable"
 
 
-import blogService from './services/blogs'
-import loginService from './services/login'
+import blogService from "./services/blogs"
+import loginService from "./services/login"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -31,7 +31,7 @@ const App = () => {
   }, [message])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -44,21 +44,21 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
 
-      setMessage({ text: 'Successfully Logged In', type: 'notification' })
-      console.log('successfully logged in')
+      setMessage({ text: "Successfully Logged In", type: "notification" })
+      console.log("successfully logged in")
     } catch (err) {
-      setMessage({ text: 'Invalid Credentials', type: 'error' })
-      console.log('error logging in')
+      setMessage({ text: "Invalid Credentials", type: "error" })
+      console.log("error logging in")
     }
   }
 
   const handleLogout = () => {
     window.localStorage.clear()
-    setMessage({ text: 'Successfully Logged Out', type: 'notification' })
+    setMessage({ text: "Successfully Logged Out", type: "notification" })
     setUser(null)
   }
 
@@ -66,8 +66,8 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try{
       if (!title || !author || !url){
-        setMessage({ text: 'Please fill in all fields', type: 'error' })
-        console.log('fill in all fields')
+        setMessage({ text: "Please fill in all fields", type: "error" })
+        console.log("fill in all fields")
         return
       }
       const blog = await blogService.create({
@@ -76,16 +76,16 @@ const App = () => {
         url,
       })
       setBlogs(blogs.concat(blog))
-      setMessage({ text: `A new blog ${title} by ${author} added`, type: 'notification' })
-      console.log('Successfully added new blog')
+      setMessage({ text: `A new blog ${title} by ${author} added`, type: "notification" })
+      console.log("Successfully added new blog")
     }catch(exception){
-      setMessage({ text: 'Error Adding Blog', type: 'error' })
-      console.log('adding blog failed')
+      setMessage({ text: "Error Adding Blog", type: "error" })
+      console.log("adding blog failed")
     }
   }
 
   const updateLikes = async (id, blogToUpdate) => {
-    console.log('updating likes in app.js')
+    console.log("updating likes in app.js")
     try{
       const updatedBlog = await blogService.update(id,blogToUpdate)
       const newBlogs = blogs.map((blog) =>
@@ -93,21 +93,21 @@ const App = () => {
       )
       setBlogs(newBlogs)
     } catch( exception){
-      setMessage({ text: 'Error updating likes', type: 'error' })
+      setMessage({ text: "Error updating likes", type: "error" })
     }
 
   }
 
   const deleteBlog = async (blogId) => {
-    console.log('delete blog, app.js')
+    console.log("delete blog, app.js")
     try{
       await blogService.remove(blogId)
 
       const updatedBlogs = blogs.filter((blog) => blog.id !==blogId)
       setBlogs(updatedBlogs)
-      setMessage({ text: 'Blog Removed',type: 'notification' })
+      setMessage({ text: "Blog Removed",type: "notification" })
     } catch( exception){
-      setMessage({ text: 'Error updating likes', type: 'error' })
+      setMessage({ text: "Error updating likes", type: "error" })
     }
 
   }
@@ -122,7 +122,7 @@ const App = () => {
         </Togglable> :
         <div>
 
-          <span>{user.name} {' '} {user.username} </span> logged in{' '}
+          <span>{user.name} {" "} {user.username} </span> logged in{" "}
           <button  onClick={handleLogout}>
               logout
           </button>

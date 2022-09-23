@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 
 const Blog = ({ blog, updateLike, deleteBlog, username }) => {
   const [visible, setVisible] = useState(false)
@@ -7,7 +7,7 @@ const Blog = ({ blog, updateLike, deleteBlog, username }) => {
     setVisible(!visible)
   }
   const handleLike = () => {
-    console.log('adding a like')
+    console.log("adding a like")
     const blogToUpdate = {
       title: blog.title,
       author: blog.author,
@@ -20,7 +20,7 @@ const Blog = ({ blog, updateLike, deleteBlog, username }) => {
   }
 
   const handleDelete = () => {
-    console.log('deleting a post')
+    console.log("deleting a post")
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       deleteBlog(blog.id)
     }
@@ -30,19 +30,19 @@ const Blog = ({ blog, updateLike, deleteBlog, username }) => {
     <div className="blog">
       <div>
         <span className="title">{blog.title} - </span>
-        <span className="author">{blog.author}</span>{' '}
+        <span className="author">{blog.author}</span>{" "}
         <button id="view-btn" onClick={toggleVisibility}>
-          {visible ? 'hide' : 'show'}
+          {visible ? "hide" : "view"}
         </button>
       </div>
       {visible && (
         <div className="blog-details">
           <div>{blog.url}</div>
           <div>
-            Likes: {blog.likes}{' '}
+            Likes: {blog.likes}{" "}
             <button id="like-btn" onClick={handleLike}>
               like
-            </button>{' '}
+            </button>{" "}
           </div>
           <div>{blog.user.username}</div>
           {blog.user.username === username && (

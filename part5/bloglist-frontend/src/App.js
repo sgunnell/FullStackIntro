@@ -31,7 +31,7 @@ const App = () => {
   }, [message])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser")
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -114,16 +114,17 @@ const App = () => {
 
   return (
     <div>
-      {user === null ? <h2> log in to application</h2> : <h2> blogs</h2>}
+      <h1 className="header-title">Blogs</h1>
       <Notification message={message} />
       {user === null ?
-        <Togglable buttonLabel = 'login'>
-          <LoginForm handleLogin={handleLogin}/>
-        </Togglable> :
+        (
+          <LoginForm handleLogin={handleLogin} />
+        )
+        :
         <div>
 
           <span>{user.name} {" "} {user.username} </span> logged in{" "}
-          <button  onClick={handleLogout}>
+          <button id="logout-btn" onClick={handleLogout}>
               logout
           </button>
           <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>

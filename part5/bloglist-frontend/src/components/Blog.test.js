@@ -50,11 +50,11 @@ describe("<Blog />", () => {
     expect(blogDetails).toBeInTheDocument()
   })
 
-  test("renders blog details when view button is clicked", () => {
-    const viewButton = component.container.querySelector("button")
+  test("if the Like button is clicked twice, the event handler is also called twice", () => {
+    const viewButton = component.container.querySelector("view")
     fireEvent.click(viewButton)
 
-    const likeButton = component.container.querySelector("button")
+    const likeButton = component.container.querySelector("like")
     fireEvent.click(likeButton)
     fireEvent.click(likeButton)
 

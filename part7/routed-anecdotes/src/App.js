@@ -47,8 +47,9 @@ const App = () => {
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
-    navigate("/")
     setAnecdotes(anecdotes.concat(anecdote))
+    navigate("/")
+    
     setNotification(`A new anecdote ${anecdote.content} created!`)
   }
 

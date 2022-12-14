@@ -1,31 +1,27 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { createNotification } from "../reducers/notificationReducer"
+//import { useNavigate } from "react-router-dom"
+import { deleteBlog, likeBlog } from "../reducers/blogReducer"
 
-const Blog = ({ blog, updateLike, deleteBlog, username }) => {
+const Blog = ({ blog, username }) => {
   const dispatch = useDispatch()
+  //const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
     setVisible(!visible)
   }
   const handleLike = () => {
-    dispatch(createNotification(`Added a like: ${blog.title}`, 5))
-    const blogToUpdate = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-    }
-
-    updateLike(blog.id,blogToUpdate)
+    const { id } = blog
+    const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
+    dispatch(likeBlog(id, blogToUpdate))
   }
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(createNotification(`Blog Deleted: ${blog.title}`, 5))
-      deleteBlog(blog.id)
+      console.log(blog)
+      dispatch(deleteBlog(blog))
+      //navigate("/")
     }
   }
 

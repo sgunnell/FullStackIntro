@@ -1,36 +1,68 @@
 import { createSlice } from "@reduxjs/toolkit"
+import blogService from "../services/blogs"
+import { createNotification } from "./notificationReducer"
 
 const blogSlice = createSlice({
-    name: "blog",
-    initialState: [],
-    reducers:{
-        appendBlog(state, action){
-            state.push(action.payload)
-        }
+  name: "blogs",
+  initialState: [],
+  reducers:{
+    appendBlog(state, action){
+      state.push(action.payload)
+    },
+    updateBlog(state, action) {
+      const updateBlog = action.payload
+      const { id } = updateBlog
+      return state.map((blog) =>
+        blog.id !== id ? blog : updateBlog)
+    },
+    removeBlog(state, action){
+      return state.filter((blog) => blog.id !==action.payload )
     }
+  }
 })
 
-const { appendBlog } = blogSlice.actions
+export const { appendBlog, removeBlog, updateBlog } = blogSlice.actions
 
 
-export const createBlog = (blog)=> {
-    return async (dispatch)
+export const createBlog = (blog) => {
+  return async (dispatch) => {
     try{
-      if (!title || !author || !url){
-        setMessage({ text: "Please fill in all fields", type: "error" })
-        console.log("fill in all fields")
-        return
-      }
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      setBlogs(blogs.concat(blog))
-      setMessage({ text: `A new blog ${title} by ${author} added`, type: "notification" })
+      const newBlog = await blogService.create(blog)
+      dispatch(appendBlog(newBlog))
+      dispatch(createNotification(`A new blog ${blog.title} by ${blog.author} added`, 5))
       console.log("Successfully added new blog")
-    }catch(exception){
-      setMessage({ text: "Error Adding Blog", type: "error" })
+    }catch(error){
+      dispatch(createNotification(error.response.data.error , 5))
       console.log("adding blog failed")
     }
   }
+}
+
+export const likeBlog = (id, blog) => {
+  return async (dispatch) => {
+    try{
+      const likedBlog = await blogService.update(id, blog)
+      dispatch(updateBlog(likedBlog))
+      dispatch(createNotification(`${blog.title} by ${blog.author} liked`,5))
+    }catch(error){
+      dispatch(createNotification(error.response.data.error , 5))
+      console.log("liking blog failed")
+    }
+  }
+}
+
+export const deleteBlog = (blog) => {
+  return async (dispatch) => {
+    try{
+      console.log(blog)
+      await blogService.remove(blog.id)
+      dispatch(removeBlog(blog.id))
+      dispatch(createNotification(`${blog.title} by ${blog.author} removed`, 5))
+    }catch(error){
+      dispatch(createNotification(error.response.data.error , 5))
+      console.log("removing blog failed")
+    }
+  }
+}
+
+export default blogSlice.reducer

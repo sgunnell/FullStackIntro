@@ -1,64 +1,55 @@
-import { useState } from "react"
 import { useDispatch } from "react-redux"
+import { createBlog } from "../reducers/blogReducer"
 import { createNotification } from "../reducers/notificationReducer"
+import { useField } from "../hooks/index"
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ togglableRef }) => {
   const dispatch = useDispatch()
-  const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" })
+  const { reset: resetTitle, ...title } = useField("text")
+  const { reset: resetAuthor, ...author } = useField("text")
+  const { reset: resetUrl, ...url } = useField("text")
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target
-    setNewBlog({ ...newBlog, [name]: value })
-  }
+
 
   const handleCreateBlog = (event) => {
     event.preventDefault()
-    try{
-      createBlog(newBlog.title,newBlog.author, newBlog.url)
-      setNewBlog({ title: "", author: "", url: "" })
-      dispatch(createNotification(`created new blog: ${newBlog.title}`, 5))
-    }catch( exception ){
-      dispatch(createNotification(`error creating blog: ${newBlog.title}`, 5))
+    togglableRef.current.toggleVisibility()
+    const newBlog = {
+      title: title.value,
+      author: author.value,
+      url: url.value,
     }
+
+    dispatch(createBlog(newBlog))
+    dispatch(createNotification(`created new blog: ${newBlog.title}`, 5))
+  }
+
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetTitle()
+    resetAuthor()
+    resetUrl()
   }
 
   return (
     <div>
       <h2>Create new blog</h2>
-      <form onSubmit={handleCreateBlog}>
+      <form>
         <div>
             title
-          <input
-            id="title"
-            name="title"
-            type="text"
-            value={newBlog.title}
-            onChange={handleInputChange}
-          />
+          <input {...title} />
         </div>
         <div>
             author
-          <input
-            id="author"
-            name="author"
-            type="text"
-            value={newBlog.author}
-            onChange={handleInputChange}
-          />
+          <input {...author} />
         </div>
         <div>
-            url
-          <input
-            id="url"
-            name="url"
-            type="text"
-            value={newBlog.url}
-            onChange={handleInputChange}
-          />
+            url for more info
+          <input {...url} />
         </div>
-        <button type="submit">
-            create
-        </button>
+        <button onClick={handleCreateBlog}>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )

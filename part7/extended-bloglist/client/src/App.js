@@ -62,56 +62,6 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (title, author, url) => {
-    blogFormRef.current.toggleVisibility()
-    try{
-      if (!title || !author || !url){
-        setMessage({ text: "Please fill in all fields", type: "error" })
-        console.log("fill in all fields")
-        return
-      }
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      setBlogs(blogs.concat(blog))
-      setMessage({ text: `A new blog ${title} by ${author} added`, type: "notification" })
-      console.log("Successfully added new blog")
-    }catch(exception){
-      setMessage({ text: "Error Adding Blog", type: "error" })
-      console.log("adding blog failed")
-    }
-  }
-
-  const updateLikes = async (id, blogToUpdate) => {
-    console.log("updating likes in app.js")
-    try{
-      const updatedBlog = await blogService.update(id,blogToUpdate)
-      const newBlogs = blogs.map((blog) =>
-        blog.id === id ? updatedBlog : blog
-      )
-      setBlogs(newBlogs)
-    } catch( exception){
-      setMessage({ text: "Error updating likes", type: "error" })
-    }
-
-  }
-
-  const deleteBlog = async (blogId) => {
-    console.log("delete blog, app.js")
-    try{
-      await blogService.remove(blogId)
-
-      const updatedBlogs = blogs.filter((blog) => blog.id !==blogId)
-      setBlogs(updatedBlogs)
-      setMessage({ text: "Blog Removed",type: "notification" })
-    } catch( exception){
-      setMessage({ text: "Error updating likes", type: "error" })
-    }
-
-  }
-
   return (
     <div>
       <h1 className="header-title">Blogs</h1>
@@ -128,7 +78,7 @@ const App = () => {
               logout
           </button>
           <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>
-            <BlogForm createBlog={createBlog}/>
+            <BlogForm togglableRef={blogFormRef}/>
           </Togglable>
           <div className="blogs">
             {blogs
@@ -136,8 +86,7 @@ const App = () => {
               .map((blog) => (
                 <Blog
                   username={user.username}
-                  updateLike={updateLikes}
-                  deleteBlog={deleteBlog}
+
                   key={blog.id}
                   blog={blog}
                 />

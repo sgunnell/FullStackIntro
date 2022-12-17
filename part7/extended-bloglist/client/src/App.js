@@ -8,14 +8,21 @@ import Togglable from "./components/Togglable"
 
 
 import blogService from "./services/blogs"
-import loginService from "./services/login"
+
+import { login, logout } from "./reducers/loginReducer"
+import { useDispatch, useSelector } from "react-redux"
+
+import userService from "./services/users"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+  //const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.login)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs( blogs ))
@@ -31,35 +38,17 @@ const App = () => {
   }, [message])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+    const userInStorage = userService.getUser()
+    if (userInStorage) {
+      dispatch(login(userInStorage))
     }
   }, [])
 
-  const handleLogin = async (username, password) => {
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-
-      setMessage({ text: "Successfully Logged In", type: "notification" })
-      console.log("successfully logged in")
-    } catch (err) {
-      setMessage({ text: "Invalid Credentials", type: "error" })
-      console.log("error logging in")
-    }
-  }
 
   const handleLogout = () => {
     window.localStorage.clear()
     setMessage({ text: "Successfully Logged Out", type: "notification" })
-    setUser(null)
+    dispatch(logout(null))
   }
 
   return (
@@ -68,7 +57,7 @@ const App = () => {
       <Notification/>
       {user === null ?
         (
-          <LoginForm handleLogin={handleLogin} />
+          <LoginForm/>
         )
         :
         <div>

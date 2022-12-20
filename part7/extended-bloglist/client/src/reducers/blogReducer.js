@@ -9,6 +9,9 @@ const blogSlice = createSlice({
     appendBlog(state, action){
       state.push(action.payload)
     },
+    setBlogs(state, action) {
+      return action.payload
+    },
     updateBlog(state, action) {
       const updateBlog = action.payload
       const { id } = updateBlog
@@ -21,18 +24,32 @@ const blogSlice = createSlice({
   }
 })
 
-export const { appendBlog, removeBlog, updateBlog } = blogSlice.actions
+export const { appendBlog, setBlogs, removeBlog, updateBlog } = blogSlice.actions
 
+export const initializeBlogs = () => {
+  return async (dispatch) => {
+    const blogs = await blogService.getAll()
+    console.log("Blogs in initialize blogs:", blogs)
+    dispatch(setBlogs(blogs))
+  }
+}
 
 export const createBlog = (blog) => {
   return async (dispatch) => {
     try{
       const newBlog = await blogService.create(blog)
       dispatch(appendBlog(newBlog))
-      dispatch(createNotification(`A new blog ${blog.title} by ${blog.author} added`, 5))
-      console.log("Successfully added new blog")
+      dispatch(createNotification(
+        {
+          message: `A new blog ${blog.title} by ${blog.author} added`,
+          type: "success",
+        },
+        5
+      ))
     }catch(error){
-      dispatch(createNotification(error.response.data.error , 5))
+      dispatch(createNotification(
+        { message: error.response.data.error, type: "error" },5
+      ))
       console.log("adding blog failed")
     }
   }
@@ -43,9 +60,17 @@ export const likeBlog = (id, blog) => {
     try{
       const likedBlog = await blogService.update(id, blog)
       dispatch(updateBlog(likedBlog))
-      dispatch(createNotification(`${blog.title} by ${blog.author} liked`,5))
+      dispatch(createNotification(
+        {
+          message: `${blog.title} by ${blog.author} liked`,
+          type: "success",
+        },
+        5
+      ))
     }catch(error){
-      dispatch(createNotification(error.response.data.error , 5))
+      dispatch(createNotification(
+        { message: error.response.data.error, type: "error" },5
+      ))
       console.log("liking blog failed")
     }
   }
@@ -57,9 +82,17 @@ export const deleteBlog = (blog) => {
       console.log(blog)
       await blogService.remove(blog.id)
       dispatch(removeBlog(blog.id))
-      dispatch(createNotification(`${blog.title} by ${blog.author} removed`, 5))
+      dispatch(createNotification(
+        {
+          message: `${blog.title} by ${blog.author} removed`,
+          type: "success",
+        },
+        5
+      ))
     }catch(error){
-      dispatch(createNotification(error.response.data.error , 5))
+      dispatch(createNotification(
+        { message: error.response.data.error, type: "error" },5
+      ))
       console.log("removing blog failed")
     }
   }

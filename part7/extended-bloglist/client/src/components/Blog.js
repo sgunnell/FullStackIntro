@@ -1,12 +1,15 @@
 import { useState } from "react"
-import { useDispatch } from "react-redux"
-//import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
 import { deleteBlog, likeBlog } from "../reducers/blogReducer"
 
-const Blog = ({ blog, username }) => {
+const Blog = () => {
   const dispatch = useDispatch()
+  const { id } = useParams()
   //const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
+  const blog = useSelector((state) => state.blogs.find((b) => b.id === id))
+  const user = useSelector((state) => state.login)
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -46,7 +49,7 @@ const Blog = ({ blog, username }) => {
             </button>{" "}
           </div>
           <div>{blog.user.username}</div>
-          {blog.user.username === username && (
+          {blog.user.username === user.username && (
             <button id="delete-btn" onClick={handleDelete}>
               delete
             </button>

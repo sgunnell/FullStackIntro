@@ -21,7 +21,13 @@ const BlogForm = ({ togglableRef }) => {
     }
 
     dispatch(createBlog(newBlog))
-    dispatch(createNotification(`created new blog: ${newBlog.title}`, 5))
+    dispatch(createNotification(
+      {
+        message: `created new blog: ${newBlog.title}`,
+        type: "success",
+      },
+      5
+    ))
   }
 
 

@@ -1,41 +1,29 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
+import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm  from "./components/BlogForm"
 import Togglable from "./components/Togglable"
+import { Routes, Route } from "react-router-dom"
 
-
-import blogService from "./services/blogs"
-
+import Users from "./components/Users"
+import User from "./components/User"
 import { login, logout } from "./reducers/loginReducer"
 import { useDispatch, useSelector } from "react-redux"
+import { initializeUsers } from "./reducers/userReducer"
+import { initializeBlogs } from "./reducers/blogReducer"
+
+import { Container } from "@mui/material"
 
 import userService from "./services/users"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  //const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   const user = useSelector((state) => state.login)
-
-  useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs( blogs ))
-  }, [])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [message])
 
   useEffect(() => {
     const userInStorage = userService.getUser()
@@ -44,46 +32,47 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    dispatch(initializeUsers())
+    dispatch(initializeBlogs())
+  }, [])
+
 
   const handleLogout = () => {
     window.localStorage.clear()
-    setMessage({ text: "Successfully Logged Out", type: "notification" })
     dispatch(logout(null))
   }
 
   return (
-    <div>
-      <h1 className="header-title">Blogs</h1>
-      <Notification/>
-      {user === null ?
-        (
-          <LoginForm/>
-        )
-        :
-        <div>
+    <Container>
+      <div>
+        <h1 className="header-title">Blogs</h1>
+        <Notification/>
+        {user === null ?
+          (
+            <LoginForm/>
+          )
+          :
+          <div>
 
-          <span>{user.name} {" "} {user.username} </span> logged in{" "}
-          <button id="logout-btn" onClick={handleLogout}>
+            <span>{user.name} {" "} {user.username} </span> logged in{" "}
+            <button id="logout-btn" onClick={handleLogout}>
               logout
-          </button>
-          <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>
-            <BlogForm togglableRef={blogFormRef}/>
-          </Togglable>
-          <div className="blogs">
-            {blogs
-              .sort((a,b) => b.likes - a.likes)
-              .map((blog) => (
-                <Blog
-                  username={user.username}
+            </button>
+            <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>
+              <BlogForm togglableRef={blogFormRef}/>
+            </Togglable>
 
-                  key={blog.id}
-                  blog={blog}
-                />
-              ))}
+            <Routes>
+              <Route path="/" element={<BlogList/>}/>
+              <Route path="/blogs/:id" element={<Blog/>}/>
+              <Route path="/users" element={<Users/>} />
+              <Route path="/users/:id" element={<User />}/>
+            </Routes>
           </div>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    </Container>
   )
 }
 

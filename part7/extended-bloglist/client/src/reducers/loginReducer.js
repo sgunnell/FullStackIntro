@@ -26,17 +26,17 @@ export const logUserIn = (credentials) => {
       const user = await loginService.login({ username, password })
       userService.setUser(user)
       dispatch(login(user))
-      dispatch(
-        createNotification(
-          `Welcome ${user.name}!`, 5
-        )
-      )
+      dispatch(createNotification(
+        {
+          message: `Welcome ${user.name}!`,
+          type: "success",
+        },
+        5
+      ))
     }catch(error){
-      dispatch(
-        createNotification(
-          error.response.data.error , 5
-        )
-      )
+      dispatch(createNotification(
+        { message: error.response.data.error, type: "error" },5
+      ))
       console.log("login failed")
     }
   }

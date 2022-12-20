@@ -16,6 +16,7 @@ const { setUsers } = userSlice.actions
 export const initializeUsers = () => {
   return async (dispatch) => {
     const users = await userService.getAll()
+    console.log("logging initialize users in redux:",users)
     dispatch(setUsers(users))
   }
 }

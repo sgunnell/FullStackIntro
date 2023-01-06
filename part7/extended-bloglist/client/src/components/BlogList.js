@@ -1,6 +1,10 @@
+import { useRef } from "react"
 import { orderBy } from "lodash"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import Togglable from "./Togglable"
+import BlogForm  from "./BlogForm"
+
 
 import {
   Table,
@@ -13,13 +17,16 @@ import {
 
 
 const BlogList = () => {
+  const blogFormRef = useRef()
   const blogs = useSelector((state) => state.blogs)
-  console.log("Bloglist accessing blogs from redux:",blogs)
   const sortedBlogs = orderBy(blogs, ["likes"], ["desc"])
 
   return (
     <div className="blogs">
       <h2> Blogs</h2>
+      <Togglable buttonLabel = 'add blog' ref = {blogFormRef}>
+        <BlogForm togglableRef={blogFormRef}/>
+      </Togglable>
 
       <TableContainer component={Paper}>
         <Table>

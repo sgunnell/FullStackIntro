@@ -1,12 +1,8 @@
 import { useField } from "../hooks/index"
-//import loginService from "../services/login"
-
-//import { createNotification } from "../reducers/notificationReducer"
 import { logUserIn } from "../reducers/loginReducer"
 import { useDispatch } from "react-redux"
 
-//import userService from "../services/users"
-
+import { TextField, Button } from "@mui/material"
 
 const LoginForm = () => {
   const { reset: resetUsername, ...username } = useField("text")
@@ -18,7 +14,6 @@ const LoginForm = () => {
     event.preventDefault()
     const credentials = { username: username.value, password: password.value }
     dispatch(logUserIn(credentials))
-    console.log("successfully logged in")
     resetUsername()
     resetPassword()
   }
@@ -28,19 +23,17 @@ const LoginForm = () => {
       <h2>Login to application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          username
-          <input {...username} />
+          <TextField label="username" {...username} variant="filled" required margin="dense"/>
         </div>
         <div>
-          password
-          <input {...password} />
+          <TextField label="password" {...password} variant="filled" required margin="dense"/>
         </div>
-        <button id="login-btn" type="submit">login</button>
+        <Button variant="contained" color="primary" type="submit">
+            login
+        </Button>
       </form>
     </div>
   )
 }
-
-
 
 export default LoginForm

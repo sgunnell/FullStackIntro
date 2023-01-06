@@ -1,19 +1,19 @@
-import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { deleteBlog, likeBlog } from "../reducers/blogReducer"
+
+import Comments from "./Comments"
 
 const Blog = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
-  //const navigate = useNavigate()
-  const [visible, setVisible] = useState(false)
+  const navigate = useNavigate()
+
   const blog = useSelector((state) => state.blogs.find((b) => b.id === id))
   const user = useSelector((state) => state.login)
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+  if (!blog) return null
+
   const handleLike = () => {
     const { id } = blog
     const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
@@ -22,40 +22,39 @@ const Blog = () => {
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      console.log(blog)
       dispatch(deleteBlog(blog))
-      //navigate("/")
+      navigate("/")
     }
   }
 
   return (
     <div className="blog">
       <div>
-        <span className="title">{blog.title} - </span>
-        <span className="author">{blog.author}</span>{" "}
-        <button id="view-btn" onClick={toggleVisibility}>
-          {visible ? "hide" : "view"}
-        </button>
-      </div>
-      {visible && (
+        <h2>
+          {blog.title} -{blog.author}
+        </h2>
+
         <div className="blog-details">
-          <div>{blog.url}</div>
+          <a href={blog.url}> {blog.url} </a>
+        </div>
+        <div className="blog-details">
           <div>
             <span data-cy="likes">
-              Likes: {blog.likes}
+              {blog.likes} likes
             </span>
             <button id="like-btn" onClick={handleLike}>
               like
             </button>{" "}
           </div>
-          <div>{blog.user.username}</div>
+          <div>added by {blog.user.username}</div>
           {blog.user.username === user.username && (
             <button id="delete-btn" onClick={handleDelete}>
               delete
             </button>
           )}
+          <Comments blog={blog}/>
         </div>
-      )}
+      </div>
     </div>
   )
 }

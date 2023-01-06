@@ -20,7 +20,7 @@ const blogSlice = createSlice({
     },
     removeBlog(state, action){
       return state.filter((blog) => blog.id !==action.payload )
-    }
+    },
   }
 })
 
@@ -58,7 +58,7 @@ export const createBlog = (blog) => {
 export const likeBlog = (id, blog) => {
   return async (dispatch) => {
     try{
-      const likedBlog = await blogService.update(id, blog)
+      const likedBlog = await blogService.addLike(id, blog)
       dispatch(updateBlog(likedBlog))
       dispatch(createNotification(
         {
@@ -94,6 +94,28 @@ export const deleteBlog = (blog) => {
         { message: error.response.data.error, type: "error" },5
       ))
       console.log("removing blog failed")
+    }
+  }
+}
+
+export const createComment = (id, comment) => {
+  return async (dispatch) => {
+    try{
+      console.log("testing comment parameters: ", { comment })
+      const commentedBlog = await blogService.addComment(id, comment)
+      console.log("testing comment parameters: ", { commentedBlog })
+      dispatch(updateBlog(commentedBlog))
+      dispatch(createNotification(
+        {
+          message: `Comment ${comment} added to ${commentedBlog.title}`,
+          type: "success",
+        },
+        5
+      ))
+    }catch(error){
+      dispatch(createNotification(
+        { message: error.response.data.error, type: "error" },5
+      ))
     }
   }
 }

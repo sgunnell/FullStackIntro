@@ -15,7 +15,6 @@ import {
 
 const Users = () => {
   const users = useSelector((state) => state.users)
-  console.log("console logging users retrieved from stores in Users comp:",users)
 
   return(
     <div>

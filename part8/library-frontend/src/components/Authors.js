@@ -2,7 +2,7 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-  const authors = []
+  const authors = props.authors
 
   return (
     <div>
@@ -19,7 +19,7 @@ const Authors = (props) => {
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
-            </tr>
+            </tr> 
           ))}
         </tbody>
       </table>

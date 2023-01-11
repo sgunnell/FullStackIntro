@@ -6,24 +6,29 @@ let authors = [
     name: 'Robert Martin',
     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
     born: 1952,
+    bookCount: 2,
   },
   {
     name: 'Martin Fowler',
     id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963
+    born: 1963,
+    bookCount: 1,
   },
   {
     name: 'Fyodor Dostoevsky',
     id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821
+    born: 1821,
+    bookCount: 2,
   },
   { 
     name: 'Joshua Kerievsky', // birthyear not known
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
+    bookCount: 1,
   },
   { 
     name: 'Sandi Metz', // birthyear not known
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
+    bookCount: 1,
   },
 ]
 
@@ -90,6 +95,7 @@ const typeDefs = gql`
   type Author {
     name: String!
     born: Int
+    bookCount: Int!
     id: ID!
   }
   type Book {
@@ -151,9 +157,11 @@ const resolvers = {
     addBook: (root, args) => {
       const authorCheck = authors.find((p) => p.name === args.author)
       if(!authorCheck){
-        authors = authors.concat({name: args.author})
+        authors = authors.concat({name: args.author, bookCount: 1, id: uuid()})
+      }else{ 
+        authorCheck.bookCount = authorCheck.bookCount + 1
+        authors = authors.map( author => (author.name !== args.name) ? (author) : authorCheck )
       }
-      
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       return book

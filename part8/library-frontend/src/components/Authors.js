@@ -1,8 +1,13 @@
+import SetBirthyear from "./SetBirthyear"
+
 const Authors = (props) => {
+  
+
   if (!props.show) {
     return null
   }
   const authors = props.authors
+
 
   return (
     <div>
@@ -23,6 +28,8 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <SetBirthyear names = {authors.map((a) => a.name)} setError = {props.setError} />
+      
     </div>
   )
 }

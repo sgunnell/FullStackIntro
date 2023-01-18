@@ -16,8 +16,9 @@ const NewBook = ({show, setError}) => {
   const [ addBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, {query: ALL_AUTHORS} ],
     onError: (error) => {
+      console.log("found error:",error.graphQLErrors[0].message)
       setError(error.graphQLErrors[0].message)
-    }
+    },
   })
 
   if (!show) {

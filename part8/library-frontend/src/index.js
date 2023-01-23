@@ -1,15 +1,15 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import { setContext } from '@apollo/client/link/context'
 
 import {
-    ApolloClient,
-    ApolloProvider,
-    HttpLink,
-    InMemoryCache,
-    split
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  split,
 } from '@apollo/client'
+
+import { setContext } from '@apollo/client/link/context'
 
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
@@ -21,10 +21,10 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: token ? `bearer ${token}` : null,
-    }
+    },
   }
 })
-  
+
 const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
 
 const wsLink = new GraphQLWsLink(
@@ -47,11 +47,11 @@ const splitLink = split(
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: splitLink
+  link: splitLink,
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <ApolloProvider client={client}>
-        <App />
-    </ApolloProvider>
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>
 )

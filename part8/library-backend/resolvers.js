@@ -1,14 +1,16 @@
 const { UserInputError, AuthenticationError } = require("apollo-server")
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 const jwt = require('jsonwebtoken')
 
 const config = require('./utils/config')
 const Author = require('./models/author')
 const Book = require('./models/book')
-
-const { PubSub } = require('graphql-subscriptions')
-const pubsub = new PubSub()
+const User = require("./models/user");
 
 let books = []
+
 const resolvers = {
     Query: {
       bookCount: async () => Book.collection.countDocuments(),
@@ -113,7 +115,7 @@ const resolvers = {
           id: user._id,
         }
   
-        return { value: jwt.sign(userForToken, process.env.SECRET) }
+        return { value: jwt.sign(userForToken, config.SECRET) }
       },
     },
     Subscription: {

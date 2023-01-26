@@ -1,5 +1,5 @@
 
- const calculateBMI = (height: number, weight: number) => {
+export const calculateBMI = (height: number, weight: number) => {
     const bmi = weight/((height/100)**2);
 
     switch (true) {
@@ -19,11 +19,10 @@
             return "Obese (Class II)";
         case (bmi >= 40):
             return "Obese (Class III)";
+    default:
+        return "Undetermined given parameters";
             
     }
-}
+};
 
-
-const a: number = Number(process.argv[2])
-const b: number = Number(process.argv[3])
-console.log(calculateBMI(a, b))
+export default calculateBMI;

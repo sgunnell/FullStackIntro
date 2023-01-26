@@ -1,9 +1,9 @@
-import { question } from "readline-sync";
+/* import { question } from "readline-sync";
 
 interface userValues {
     userTarget: string;
     userDailyHours: string[];
-}
+}*/
 interface validatedValues {
     validTarget: number;
     validDailyHours: number[];
@@ -19,7 +19,7 @@ interface Result  {
     average: number; 
 }
 
-const parseInput = (args: Array<string>): userValues => {
+/*const parseInput = (args: Array<string>): userValues => {
     let userTarget = '';
     let userDailyHours: string[] = [];
     if (args.length < 4) {
@@ -46,11 +46,11 @@ const parseInput = (args: Array<string>): userValues => {
         userDailyHours = args.slice(3);
     }
     return { userTarget, userDailyHours };
-}
+};*/
 
-const validateArguments = ( userTarget: string, userDailyHours: string[]): validatedValues => {
+export const validateArguments = ( userTarget: string, userDailyHours: string[]): validatedValues => {
     if (Number(userTarget) <= 0){
-        throw new Error("Target must be a positive value")
+        throw new Error("Target must be a positive value");
     }
     if (!Array.isArray(userDailyHours)) {
         throw new Error("Exercised days must be an array of values!");
@@ -67,11 +67,11 @@ const validateArguments = ( userTarget: string, userDailyHours: string[]): valid
         throw new Error("Provided values were not numbers!");
     }
 
-}
+};
 
 
 
-const exerciseCalculator = (target: number, dailyExericse: number[]) : Result =>{
+export const exerciseCalculator = (target: number, dailyExericse: number[]) : Result =>{
     const periodLength = dailyExericse.length;
     const trainingDays = dailyExericse.filter( (i) => i > 0).length;
     const average = dailyExericse.reduce((a,b) => a + b,0)/periodLength;
@@ -106,18 +106,6 @@ const exerciseCalculator = (target: number, dailyExericse: number[]) : Result =>
         average,
       };
 
-}
+};
 
 //console.log(exerciseCalculator(2, [3, 0, 2, 4.5, 0, 3, 1]))
-
-try {
-    const { userTarget, userDailyHours } = (parseInput(process.argv));
-    const { validTarget, validDailyHours } = validateArguments( userTarget, userDailyHours )
-    console.log(exerciseCalculator(validTarget, validDailyHours))
-  } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
-    if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
-    }
-    console.log(errorMessage);
-  }

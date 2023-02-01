@@ -1,13 +1,13 @@
-import patientData from "../../data/patients";
-import { Patient, NonSensitivePatientData } from "../types";
-
+import patientsData from "../../data/patients";
+import { Patient, NonSensitivePatientData, NewPatient } from "../types";
+import { v1 as uuid } from "uuid";
 
 const getPatients = (): Array<Patient> => {
-  return patientData;
+  return patientsData;
 };
 
 const getNonSensitivePatientsData = (): Array<NonSensitivePatientData> => {
-  return patientData.map(({id, name, dateOfBirth, gender, occupation}) => ({
+  return patientsData.map(({id, name, dateOfBirth, gender, occupation}) => ({
     id,
     name,
     dateOfBirth,
@@ -16,8 +16,15 @@ const getNonSensitivePatientsData = (): Array<NonSensitivePatientData> => {
   }));
 };
 
-const addPatient = () => {
-  return null;
+const addPatient = (entry: NewPatient ): Patient => {
+
+  const newPatient = {
+    id: uuid(),
+    ...entry
+  };
+
+  patientsData.push(newPatient);
+  return newPatient;
 };
 
 export default {

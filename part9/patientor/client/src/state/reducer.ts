@@ -1,5 +1,5 @@
 import { State } from "./state";
-import { Patient } from "../types";
+import { Patient,  } from "../types";
 
 export type Action =
   | {
@@ -36,3 +36,13 @@ export const reducer = (state: State, action: Action): State => {
       return state;
   }
 };
+
+
+export const setPatientList = (patientList: Patient[]): Action => {
+  return {
+    type: 'SET_PATIENT_LIST',
+    payload: patientList
+  };
+};
+
+

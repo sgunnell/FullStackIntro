@@ -5,7 +5,7 @@ import toNewPatient from '../utils';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(patientService.getNonSensitivePatientsData());
+  res.send(patientService.getAll());
 });
 
 router.get('/:patientId', (req, res) => {
@@ -13,12 +13,16 @@ router.get('/:patientId', (req, res) => {
 });
 
 router.post('/', (req, res) => {
- 
   try{
+
+    console.log("posting step 1");
     const newPatient = toNewPatient(req.body);
-    
+    console.log("posting step 2");
     const addedEntry = patientService.addPatient(newPatient);
+    console.log("posting step 3");
     res.json(addedEntry)
+    console.log("posting step 4");
+
   } catch( error: unknown ) {
     let errorMessage = 'Something went wrong.';
     if (error instanceof Error) {

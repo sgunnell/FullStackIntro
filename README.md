@@ -12,17 +12,90 @@
 
 ## 📚 Course Content
 
-- **Part 0:** Fundamentals of Web Apps
-- **Part 1:** Introduction to React
-- **Part 2:** Communicating with the Server
-- **Part 3:** Programming a Server with NodeJS and Express
-- **Part 4:** Testing Express Servers, User Administration
-- **Part 5:** Testing React Apps
-- **Part 6:** State Management with Redux
-- **Part 7:** React Router, Custom Hooks, Styling App with CSS and Webpack
-- **Part 8:** GraphQL
-- **Part 9:** TypeScript
-- **Part 10:** React Native
+1. **[Part 0 - Fundamentals of Web apps](./part0)**
+   - General Info
+   - Fundamentals of Web apps
+
+2. **[Part 1 - Introduction to React](./part1)**
+   - Introduction to React
+   - JavaScript
+   - Component State, Event Handlers
+   - A More Complex State, Debugging React Apps
+
+3. **[Part 2 - Communicating with Server](./part2)**
+   - Rendering a Collection, Modules
+   - Forms
+   - Getting Data from Server
+   - Altering Data in Server
+   - Adding Style to React Apps
+
+4. **[Part 3 - Programming a Server with NodeJS and Express](./part3)**
+   - Node.js and Express
+   - Deploying App to Internet
+   - Saving Data to MongoDB
+   - Validation and ESLint
+
+5. **[Part 4 - Testing Express Servers, User Administration](./part4)**
+   - Structure of Backend Application, Introduction to Testing
+   - Testing and Backend
+   - User Administration
+   - Token Administration
+
+6. **[Part 5 - Testing React Apps](./part5)**
+   - Login in Frontend
+   - `props.children` and PropTypes
+   - Testing React Apps
+   - End-to-End Testing
+
+7. **[Part 6 - State Management with Redux](./part6)**
+   - Flux Architecture and Redux
+   - Many Reducers
+   - Communicating with Server in a Redux Application
+   - Connect
+
+8. **[Part 7 - React Router, Custom Hooks, Styling App with CSS and Webpack](./part7)**
+   - React Router
+   - Custom Hooks
+   - More About Styles
+   - Webpack
+   - Class Components, Miscellaneous
+   - Exercises - Extending the Bloglist
+
+9. **[Part 8 - GraphQL](./part8)**
+   - GraphQL Server
+   - React and GraphQL
+   - Database and User Administration
+   - Login and Updating the Cache
+   - Fragments and Subscriptions
+
+10. **[Part 9 - TypeScript](./part9)**
+    - Background and Introduction
+    - First Steps with TypeScript
+    - Typing the Express App
+    - React with Types
+
+11. **[Part 10 - React Native](./part10)**
+    - Introduction to React Native
+    - React Native Basics
+    - Communicating with Server
+    - Testing and Extending Our Application
+
+12. **[Part 11 - CI/CD](./part11)**
+    - Introduction to CI/CD
+    - Getting Started with GitHub Actions
+    - Deployment
+    - Keeping Green
+    - Expanding Further
+
+13. **[Part 12 - Containers](./part12)**
+    - Introduction to Containers
+    - Building and Configuring Environments
+    - Basics of Orchestration
+
+14. **[Part 13 - Using Relational Databases](./part13)**
+    - Using Relational Databases with SQL
+    - Join Tables and Queries
+    - Migrations, Many-to-Many Relationships
 
 ## 🛠️ Technologies Covered
 
@@ -52,13 +125,3 @@ Contributions are welcome! Please follow these steps if you wish to contribute:
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ by your name</sub>
-</div>
-
----
-
-Feel free to customize the content to better fit your personal style and project specifics. If you have any more questions or need additional assistance, please, let me know!
